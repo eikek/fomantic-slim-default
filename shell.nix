@@ -6,6 +6,7 @@ with pkgs;
  mkShell {
    buildInputs = [
      nodejs
+     sbt
      yuicompressor
      yarn
      lessc

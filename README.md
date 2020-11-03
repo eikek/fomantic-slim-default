@@ -8,8 +8,18 @@ This is packaged as webjar for use in your jvm-based projects.
 
 ## Usage
 
+The webjars are pushed to maven-central. With sbt:
+
+``` scala
+"com.github.eikek" % "fomantic-slim-default" % "<version>"
+```
+
 
 ## Building
 
-Install yarn and lessc. Then run `sbt package` which creates the
-webjar in the `target/` folder.
+If you have [`nix`](https://nixos.org/) installed, run:
+
+- `nix-shell --run 'sbt package'` to build the webjar, or
+- `nix-shell --run ./build.sh` to build the css files only
+
+Without nix, install yarn, lessc and yuicompressor manually.

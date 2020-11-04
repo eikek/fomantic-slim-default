@@ -1,9 +1,12 @@
 import sbt._
 import scala.sys.process._
+import ReleaseTransformations._
+
 
 name := "fomantic-slim-default"
 organization := "com.github.eikek"
 description := "A css only build of fomantic-ui without google-fonts provided as webjar."
+licenses := Seq("MIT" -> url("http://spdx.org/licenses/MIT"))
 
 autoScalaLibrary := false
 crossPaths := false
@@ -14,6 +17,46 @@ Compile / resourceGenerators += Def.task {
   val dist = buildCssFiles(logger, wd)
   copyWebjarResources(dist, (Compile / resourceManaged).value, name.value, version.value, logger)
 }.taskValue
+
+
+// --- publishing
+
+publishMavenStyle := true
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/eikek/fomantic-slim-default.git"),
+    "scm:git:git@github.com:eikek/fomantic-slim-default.git"
+  )
+)
+developers := List(
+  Developer(
+    id = "eikek",
+    name = "Eike Kettner",
+    url = url("https://github.com/eikek"),
+    email = ""
+  )
+)
+homepage := Some(url("https://github.com/eikek/fomantic-slim-default"))
+publishTo := sonatypePublishToBundle.value
+publishArtifact in Test := false
+releaseCrossBuild := false
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("publishSigned"),
+  releaseStepCommand("sonatypeBundleRelease"),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
+
+
+// --- helpers
 
 def buildCssFiles(logger: Logger, wd: File): Seq[(File, String)] = {
   val proc = Process(Seq((wd/"build.sh").toString), Some(wd))

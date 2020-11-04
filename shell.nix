@@ -7,7 +7,6 @@ with pkgs;
    buildInputs = [
      nodejs
      sbt
-     yuicompressor
      yarn
      lessc
    ];

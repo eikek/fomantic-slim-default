@@ -23,5 +23,5 @@ done
 echo "ok."
 
 echo -n "Minifying css … "
-yuicompressor --type css -o target/dist/semantic.min.css target/dist/semantic.css
+./node_modules/clean-css-cli/bin/cleancss -o target/dist/semantic.min.css target/dist/semantic.css
 echo "ok."
